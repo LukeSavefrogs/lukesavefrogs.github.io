@@ -1,14 +1,10 @@
 ---
-import "@fontsource-variable/geist";
-import "@fontsource-variable/geist-mono";
-
 interface Props {
   title: string;
   description?: string;
-  image?: string;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <!doctype html>
@@ -17,15 +13,8 @@ const { title, description, image } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    {description && <meta property="og:description" content={description} />}
-    {image && <meta property="og:image" content={image} />}
-    {Astro.site && <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />}
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
   </head>
   <body>
@@ -34,31 +23,24 @@ const { title, description, image } = Astro.props;
 </html>
 
 <style is:global>
+  /* Same palette and typography as the CV website (LukeSavefrogs/curriculum-vitae) */
   :root {
-    --bg: #fafafa;
-    --surface: #ffffff;
-    --text: #09090b;
-    --muted: #63636b;
-    --border: rgb(9 9 11 / 0.1);
-    --dot: rgb(9 9 11 / 0.14);
-    /* Same accent as the CV website (LukeSavefrogs/curriculum-vitae) */
+    --bg: #fcfcfb;
+    --text: #1d1d1f;
+    --muted: #63646a;
+    --rule: #e2e2df;
     --accent: #23508e;
-    --glow: rgb(35 80 142 / 0.14);
-
-    --font-sans: "Geist Variable", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --on-accent: #fff;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #09090b;
-      --surface: #131316;
-      --text: #ededef;
-      --muted: #a0a0ab;
-      --border: rgb(255 255 255 / 0.1);
-      --dot: rgb(255 255 255 / 0.1);
+      --bg: #17181a;
+      --text: #e6e6e3;
+      --muted: #a2a3a8;
+      --rule: #34353a;
       --accent: #93b6e6;
-      --glow: rgb(147 182 230 / 0.12);
+      --on-accent: #17181a;
     }
   }
 
@@ -75,42 +57,23 @@ const { title, description, image } = Astro.props;
   body {
     margin: 0;
     min-height: 100vh;
-    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     background: var(--bg);
     color: var(--text);
-    font: 400 1rem/1.6 var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Dot grid that fades out towards the edges, plus a soft glow at the top */
-  body::before,
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  body::before {
-    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
-    background-size: 22px 22px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
-  }
-
-  body::after {
-    background: radial-gradient(48rem 28rem at 50% -6rem, var(--glow), transparent 70%);
+    font:
+      1rem/1.6 system-ui,
+      -apple-system,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
   }
 
   a {
-    color: inherit;
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
   }
 </style>
