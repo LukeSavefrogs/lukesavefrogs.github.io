@@ -1,41 +1,78 @@
 ---
+import Icon, { type IconName } from "../components/Icon.astro";
 import Base from "../layouts/Base.astro";
 
 const name = "Luca Salvarani";
-const description =
-  "Software Developer and Open Source enthusiast based in Rome, Italy, with a passion for automating tedious tasks and optimizing workflows.";
+const role = "Software Developer";
+const location = "Rome, Italy";
+const bio =
+  "Software Developer and Open Source enthusiast with a passion for automating tedious tasks and optimizing workflows.";
+const avatar = "https://avatars.githubusercontent.com/u/33452387?v=4";
 
 // The CV is a separate GitHub Pages project site (LukeSavefrogs/curriculum-vitae), served on this same domain
 const cvUrl = "/curriculum-vitae/";
+const cvPdfUrl = "https://github.com/LukeSavefrogs/curriculum-vitae/releases/latest/download/Luca_Salvarani_CV-en.pdf";
 
-const links = [
-  { label: "GitHub", href: "https://github.com/LukeSavefrogs" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/lucasalvarani" },
-  { label: "CV in Italiano", href: `${cvUrl}it/`, hreflang: "it" },
+const socials: { label: string; href: string; icon: IconName }[] = [
+  { label: "GitHub", href: "https://github.com/LukeSavefrogs", icon: "github" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/lucasalvarani", icon: "linkedin" },
+  { label: "Stack Overflow", href: "https://stackoverflow.com/users/8965861/lukesavefrogs", icon: "stackoverflow" },
 ];
 ---
 
-<Base title={name} description={description}>
+<Base title={`${name} – ${role}`} description={bio} image={`${avatar}&s=400`}>
   <main>
-    <h1>{name}</h1>
-    <p class="bio">{description}</p>
+    <img
+      class="avatar rise"
+      style="--i: 0"
+      src={`${avatar}&s=192`}
+      width="96"
+      height="96"
+      alt={`Photo of ${name}`}
+    />
 
-    <p>
-      <a class="cta" href={cvUrl}>View my CV <span aria-hidden="true">→</span></a>
+    <p class="pill rise" style="--i: 1">
+      <Icon name="map-pin" size={14} />
+      {location}
     </p>
 
-    <ul class="links">
+    <h1 class="rise" style="--i: 2">{name}</h1>
+
+    <p class="bio rise" style="--i: 3">{bio}</p>
+
+    <div class="actions rise" style="--i: 4">
+      <a class="button primary" href={cvUrl}>
+        View my CV
+        <Icon name="arrow-right" />
+      </a>
+      <a class="button secondary" href={cvPdfUrl}>
+        Download PDF
+        <Icon name="download" />
+      </a>
+    </div>
+
+    <p class="alt-lang rise" style="--i: 5" lang="it">
+      Disponibile anche <a href={`${cvUrl}it/`} hreflang="it">in italiano</a>
+    </p>
+
+    <ul class="socials rise" style="--i: 6">
       {
-        links.map(({ label, href, hreflang }) => (
+        socials.map(({ label, href, icon }) => (
           <li>
-            <a href={href} hreflang={hreflang}>
-              {label}
+            <a href={href} aria-label={label} title={label} rel="me">
+              <Icon name={icon} size={20} />
             </a>
           </li>
         ))
       }
     </ul>
   </main>
+
+  <footer>
+    Built with <a href="https://astro.build/">Astro</a>{" · "}<a
+      href="https://github.com/LukeSavefrogs/lukesavefrogs.github.io">Source</a
+    >
+  </footer>
 </Base>
 
 <style>
@@ -43,66 +80,192 @@ const links = [
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 46rem;
+    max-width: 40rem;
     margin: 0 auto;
-    padding: 3rem 1rem;
+    padding: 4rem 1rem 2rem;
+    text-align: center;
+  }
+
+  .avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--surface);
+    box-shadow:
+      0 0 0 4px var(--bg),
+      0 0 0 5px var(--border),
+      0 12px 32px -12px rgb(0 0 0 / 0.45);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 1.75rem 0 0;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    backdrop-filter: blur(6px);
+    color: var(--muted);
+    font: 500 0.75rem/1.4 var(--font-mono);
+    letter-spacing: 0.02em;
   }
 
   h1 {
-    font-size: 2.5rem;
+    margin: 1rem 0 0;
+    font-size: clamp(2.75rem, 9vw, 4.5rem);
     font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    margin: 0 0 0.75rem;
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    /* Subtle vertical fade on the name */
+    background: linear-gradient(180deg, var(--text) 35%, color-mix(in srgb, var(--text) 60%, var(--bg)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-bottom: 0.08em;
   }
 
   .bio {
-    font-size: 1.125rem;
+    max-width: 32rem;
+    margin: 1.25rem 0 0;
     color: var(--muted);
-    max-width: 36rem;
-    margin: 0 0 2rem;
+    font-size: 1.125rem;
+    line-height: 1.65;
+    text-wrap: balance;
   }
 
-  .cta {
-    display: inline-block;
-    padding: 0.7rem 1.4rem;
-    border-radius: 0.5rem;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-weight: 600;
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .button :global(svg) {
+    transition: transform 0.15s ease;
+  }
+
+  .button:hover {
+    transform: translateY(-1px);
+  }
+
+  .primary {
+    background: var(--text);
+    color: var(--bg);
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.12),
+      0 10px 24px -10px var(--accent);
+  }
+
+  .primary:hover :global(svg) {
+    transform: translateX(3px);
+  }
+
+  .secondary {
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 80%, transparent);
+    backdrop-filter: blur(6px);
+    color: var(--text);
+  }
+
+  .secondary:hover {
+    border-color: color-mix(in srgb, var(--text) 25%, transparent);
+  }
+
+  .secondary:hover :global(svg) {
+    transform: translateY(2px);
+  }
+
+  .alt-lang {
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .alt-lang a {
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    text-underline-offset: 0.2em;
+  }
+
+  .alt-lang a:hover {
+    color: var(--text);
+  }
+
+  .socials {
+    display: flex;
+    gap: 0.5rem;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .socials a {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    color: var(--muted);
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .socials a:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--text) 7%, transparent);
+  }
+
+  footer {
+    padding: 1.5rem 1rem 2rem;
+    text-align: center;
+    color: var(--muted);
+    font: 400 0.75rem/1.5 var(--font-mono);
+  }
+
+  footer a {
     text-decoration: none;
   }
 
-  .cta:hover,
-  .cta:focus-visible {
-    filter: brightness(1.1);
+  footer a:hover {
+    color: var(--text);
+    text-decoration: underline;
   }
 
-  /* Inline list separated by a middle dot, as on the CV website */
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: 0;
-    margin: 2rem 0 0;
-    font-size: 0.875rem;
-  }
-
-  .links li:not(:last-child)::after {
-    content: "·";
-    margin: 0 0.5em;
-    color: var(--muted);
-  }
-
-  @media (max-width: 40rem) {
-    h1 {
-      font-size: 2rem;
+  /* Staggered entrance animation */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--i) * 70ms);
     }
 
-    .bio {
-      font-size: 1rem;
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+        filter: blur(4px);
+      }
     }
   }
 </style>
